@@ -1,0 +1,11 @@
+package: gotop
+import:
+- package: github.com/comail/colog
+- package: github.com/gizak/termui
+  version: ^2.2.0
+- package: github.com/shirou/gopsutil
+  version: ^2.17.9
+  subpackages:
+  - cpu
+  - mem
+- package: github.com/mattn/go-pipeline
