@@ -7,13 +7,16 @@ import (
 	"github.com/gizak/termui"
 )
 
+// NetworkRecvHistoryContainer ネットワーク受信通信率表示用コンテナ
 type NetworkRecvHistoryContainer struct {
 	linecharts []termui.Sparkline
 }
 
+// Initialize # Container Interface
 func (n *NetworkRecvHistoryContainer) Initialize() {
 }
 
+// UpdateRender # Container Interface
 func (n *NetworkRecvHistoryContainer) UpdateRender() {
 	data := network.GetInstace()
 
@@ -24,7 +27,8 @@ func (n *NetworkRecvHistoryContainer) UpdateRender() {
 	)
 }
 
-func (n *NetworkRecvHistoryContainer) CreateUi() termui.GridBufferer {
+// CreateUI # Container Interface
+func (n *NetworkRecvHistoryContainer) CreateUI() termui.GridBufferer {
 	data := network.GetInstace()
 
 	n.linecharts = make([]termui.Sparkline, 0)

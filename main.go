@@ -14,12 +14,14 @@ import (
 	"time"
 )
 
+// Container UIコンテナーインターフェイス
 type Container interface {
 	Initialize()
 	UpdateRender()
-	CreateUi() ui.GridBufferer
+	CreateUI() ui.GridBufferer
 }
 
+// DataService システム情報のデータサービスインターフェイス
 type DataService interface {
 	Initialize()
 }
@@ -33,9 +35,8 @@ func (m *containerMap) get(key string) Container {
 
 	if isOk {
 		return v
-	} else {
-		return nil
 	}
+	return nil
 }
 
 func main() {
@@ -66,7 +67,7 @@ func main() {
 	}
 	containers := containerMap{
 		m: map[string]Container{
-			"CpuHistory":         new(container.CpuHistoryContainer),
+			"CpuHistory":         new(container.CPUHistoryContainer),
 			"MemoryHistory":      new(container.MemoryHistoryContainer),
 			"SwapMemory":         new(container.SwapMemoryUsageContainer),
 			"VirtualMemory":      new(container.VirtualMemoryUsageContainer),
@@ -83,20 +84,20 @@ func main() {
 
 	ui.Body.AddRows(
 		ui.NewRow(
-			ui.NewCol(12, 0, containers.get("CpuHistory").CreateUi()),
+			ui.NewCol(12, 0, containers.get("CpuHistory").CreateUI()),
 		),
 		ui.NewRow(
-			ui.NewCol(6, 0, containers.get("MemoryHistory").CreateUi()),
-			ui.NewCol(3, 0, containers.get("SwapMemory").CreateUi()),
-			ui.NewCol(3, 0, containers.get("VirtualMemory").CreateUi()),
+			ui.NewCol(6, 0, containers.get("MemoryHistory").CreateUI()),
+			ui.NewCol(3, 0, containers.get("SwapMemory").CreateUI()),
+			ui.NewCol(3, 0, containers.get("VirtualMemory").CreateUI()),
 		),
 		ui.NewRow(
 			ui.NewCol(6, 0,
-				containers.get("NetworkSentHistory").CreateUi(),
-				containers.get("NetworkRecvHistory").CreateUi(),
-				containers.get("DiskUsage").CreateUi(),
+				containers.get("NetworkSentHistory").CreateUI(),
+				containers.get("NetworkRecvHistory").CreateUI(),
+				containers.get("DiskUsage").CreateUI(),
 			),
-			ui.NewCol(6, 0, containers.get("ProcessList").CreateUi()),
+			ui.NewCol(6, 0, containers.get("ProcessList").CreateUI()),
 		),
 	)
 

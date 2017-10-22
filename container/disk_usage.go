@@ -7,16 +7,20 @@ import (
 	"github.com/gizak/termui"
 )
 
+// DiskUsageContainer ディスク使用量表示用コンテナー
 type DiskUsageContainer struct {
 	gauge *termui.Gauge
 }
 
+// Initialize # Container Interface
 func (d *DiskUsageContainer) Initialize() {
 }
 
+// UpdateData # Container Interface
 func (d *DiskUsageContainer) UpdateData() {
 }
 
+// UpdateRender # Container Interface
 func (d *DiskUsageContainer) UpdateRender() {
 	data := disk.GetInstance()
 
@@ -27,7 +31,8 @@ func (d *DiskUsageContainer) UpdateRender() {
 		int(data.UsageStat.UsedPercent))
 }
 
-func (d *DiskUsageContainer) CreateUi() termui.GridBufferer {
+// CreateUI # Container Interface
+func (d *DiskUsageContainer) CreateUI() termui.GridBufferer {
 	d.gauge = termui.NewGauge()
 	d.gauge.Percent = 30
 	d.gauge.Width = termui.TermWidth() / 2

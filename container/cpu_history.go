@@ -7,13 +7,15 @@ import (
 	"github.com/gizak/termui"
 )
 
-type CpuHistoryContainer struct {
+// CPUHistoryContainer CPU使用率を構成するコンテナー
+type CPUHistoryContainer struct {
 	colors   []termui.Attribute
 	colorSet []termui.Attribute
 	lines    []termui.Sparkline
 }
 
-func (c *CpuHistoryContainer) Initialize() {
+// Initialize # Container Interface
+func (c *CPUHistoryContainer) Initialize() {
 	data := dataservice.GetInstance()
 
 	c.colorSet = []termui.Attribute{termui.ColorCyan, termui.ColorMagenta, termui.ColorYellow, termui.ColorRed, termui.ColorGreen, termui.ColorBlue}
@@ -24,7 +26,8 @@ func (c *CpuHistoryContainer) Initialize() {
 	}
 }
 
-func (c *CpuHistoryContainer) UpdateRender() {
+// UpdateRender # Container Interface
+func (c *CPUHistoryContainer) UpdateRender() {
 	data := dataservice.GetInstance()
 	for i := 0; i < len(data.AccumuData); i++ {
 		c.lines[i].Data = data.AccumuData[i]
@@ -40,7 +43,8 @@ func (c *CpuHistoryContainer) UpdateRender() {
 
 }
 
-func (c *CpuHistoryContainer) CreateUi() termui.GridBufferer {
+// CreateUI # Container Interface
+func (c *CPUHistoryContainer) CreateUI() termui.GridBufferer {
 	data := dataservice.GetInstance()
 
 	// single

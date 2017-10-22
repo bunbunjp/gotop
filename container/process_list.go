@@ -9,26 +9,29 @@ import (
 	"unicode/utf8"
 )
 
+// カラム名定数
 var ROW_HEADERS = []string{"PID", "Name", "CPU(%)", "MEM(%)"}
 
+// プロセス一覧を構成するコンテナーです
 type ProcessListContainer struct {
 	table       *termui.Table
 	visibleRows *[][]string
 }
 
+// Container Interface # Initialize
 func (p *ProcessListContainer) Initialize() {
-
 }
 
-func (pc *ProcessListContainer) UpdateData() {
+// Container Interface # UpdateData
+func (p *ProcessListContainer) UpdateData() {
 }
 
-func (pc *ProcessListContainer) getDefaultRow() []string {
+func (p *ProcessListContainer) getDefaultRow() []string {
 	return []string{"99999", "________________", "___", "___"}
 }
 
-func (pc *ProcessListContainer) nameStrRounding(full string) string {
-	limitLine := utf8.RuneCountInString(pc.getDefaultRow()[1])
+func (p *ProcessListContainer) nameStrRounding(full string) string {
+	limitLine := utf8.RuneCountInString(p.getDefaultRow()[1])
 	nameRunes := strings.Split(full, "")
 
 	if len(nameRunes) <= limitLine {
@@ -38,6 +41,7 @@ func (pc *ProcessListContainer) nameStrRounding(full string) string {
 	return strings.Join(nameRunes[:limitLine], "") + "..."
 }
 
+// Container Interface # UpdateRender
 func (p *ProcessListContainer) UpdateRender() {
 	data := dataservice.GetInstance()
 	visiblelimit := getHeight() - 3
@@ -89,7 +93,8 @@ func getHeight() int {
 	return 17
 }
 
-func (p *ProcessListContainer) CreateUi() termui.GridBufferer {
+// Container Interface # CreateUi
+func (p *ProcessListContainer) CreateUI() termui.GridBufferer {
 
 	p.visibleRows = &[][]string{ROW_HEADERS}
 

@@ -7,14 +7,17 @@ import (
 	"math"
 )
 
+// MemoryHistoryContainer メモリ使用率利用履歴表示用コンテナ
 type MemoryHistoryContainer struct {
 	lineChart *termui.LineChart
 }
 
+// Initialize # Container Interface
 func (m *MemoryHistoryContainer) Initialize() {
 
 }
 
+// UpdateRender # Container Interface
 func (m *MemoryHistoryContainer) UpdateRender() {
 	data := memory.GetInstance()
 
@@ -22,7 +25,8 @@ func (m *MemoryHistoryContainer) UpdateRender() {
 	m.lineChart.Data = data.VirtualUsedHistory[startline:]
 }
 
-func (m *MemoryHistoryContainer) CreateUi() termui.GridBufferer {
+// CreateUI # Container Interface
+func (m *MemoryHistoryContainer) CreateUI() termui.GridBufferer {
 	m.lineChart = termui.NewLineChart()
 	m.lineChart.BorderLabel = fmt.Sprintf("memory usage history")
 	m.lineChart.Width = termui.TermWidth() / 2

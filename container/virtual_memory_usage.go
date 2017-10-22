@@ -23,7 +23,7 @@ func (v *VirtualMemoryUsageContainer) UpdateRender() {
 		util.Byte2GBi(data.LatestVirtualStat.Total))
 }
 
-func (v *VirtualMemoryUsageContainer) CreateUi() termui.GridBufferer {
+func (v *VirtualMemoryUsageContainer) CreateUI() termui.GridBufferer {
 
 	v.virtualGauge = termui.NewGauge()
 	v.virtualGauge.Width = termui.TermWidth() / 4

@@ -23,7 +23,7 @@ func (s *SwapMemoryUsageContainer) UpdateRender() {
 		int(util.Byte2MBi(data.LatestSwapStat.Total)))
 }
 
-func (s *SwapMemoryUsageContainer) CreateUi() termui.GridBufferer {
+func (s *SwapMemoryUsageContainer) CreateUI() termui.GridBufferer {
 
 	s.swapGauge = termui.NewGauge()
 	s.swapGauge.Width = termui.TermWidth() / 4

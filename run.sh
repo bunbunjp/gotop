@@ -1,0 +1,3 @@
+go fmt ./...
+golint ./... |grep -v vendor/
+go run main.go

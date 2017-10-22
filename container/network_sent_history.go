@@ -7,13 +7,16 @@ import (
 	"github.com/gizak/termui"
 )
 
+// NetworkSentHistoryContainer ネットワーク送信通信料表示コンテナ
 type NetworkSentHistoryContainer struct {
 	linecharts []termui.Sparkline
 }
 
+// Initialize # Container Interface
 func (n *NetworkSentHistoryContainer) Initialize() {
 }
 
+// UpdateRender # Container Interface
 func (n *NetworkSentHistoryContainer) UpdateRender() {
 	data := network.GetInstace()
 
@@ -25,7 +28,8 @@ func (n *NetworkSentHistoryContainer) UpdateRender() {
 	n.linecharts[0].TitleColor = termui.ColorCyan
 }
 
-func (n *NetworkSentHistoryContainer) CreateUi() termui.GridBufferer {
+// CreateUI # Container Interface
+func (n *NetworkSentHistoryContainer) CreateUI() termui.GridBufferer {
 	data := network.GetInstace()
 
 	n.linecharts = make([]termui.Sparkline, 0)
