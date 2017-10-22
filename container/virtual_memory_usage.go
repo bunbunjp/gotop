@@ -1,10 +1,10 @@
 package container
 
 import (
-	"github.com/gizak/termui"
-	"github.com/bunbunjp/gotop/util"
-	"github.com/bunbunjp/gotop/dataservice/memory"
 	"fmt"
+	"github.com/bunbunjp/gotop/dataservice/memory"
+	"github.com/bunbunjp/gotop/util"
+	"github.com/gizak/termui"
 )
 
 type VirtualMemoryUsageContainer struct {

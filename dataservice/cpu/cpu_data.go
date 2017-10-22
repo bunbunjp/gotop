@@ -1,22 +1,21 @@
 package cpudata
 
-
 import (
 	"github.com/shirou/gopsutil/cpu"
 	"time"
 )
 
-type CpuDataService struct  {
-	CoreCount int
-	Latest []float64
+type CpuDataService struct {
+	CoreCount  int
+	Latest     []float64
 	AccumuData [][]int
 
 	isRunning bool
 }
 
-var sharedInstance *CpuDataService = &CpuDataService{isRunning:false}
+var sharedInstance *CpuDataService = &CpuDataService{isRunning: false}
 
-func GetInstance() *CpuDataService  {
+func GetInstance() *CpuDataService {
 	return sharedInstance
 }
 
@@ -27,7 +26,7 @@ func (c *CpuDataService) Initialize() {
 	core, _ := cpu.Counts(true)
 	c.CoreCount = core
 	c.AccumuData = make([][]int, core, core)
-	for i:=0; i<c.CoreCount; i++ {
+	for i := 0; i < c.CoreCount; i++ {
 		c.AccumuData[i] = append(c.AccumuData[i], 100)
 	}
 
@@ -44,7 +43,7 @@ func (c *CpuDataService) updateGoroutine() {
 }
 
 func (c *CpuDataService) update() {
-	percent, _ := cpu.Percent(0 * time.Millisecond, true)
+	percent, _ := cpu.Percent(0*time.Millisecond, true)
 
 	c.Latest = percent
 	for idx, val := range c.Latest {

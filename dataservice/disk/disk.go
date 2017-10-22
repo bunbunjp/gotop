@@ -1,8 +1,8 @@
 package disk
 
 import (
-	"time"
 	"github.com/shirou/gopsutil/disk"
+	"time"
 )
 
 type DiskDataService struct {

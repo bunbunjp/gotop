@@ -1,10 +1,9 @@
 package container
 
-
 import (
-	"github.com/gizak/termui"
-	"github.com/bunbunjp/gotop/dataservice/memory"
 	"fmt"
+	"github.com/bunbunjp/gotop/dataservice/memory"
+	"github.com/gizak/termui"
 	"math"
 )
 
@@ -19,7 +18,7 @@ func (m *MemoryHistoryContainer) Initialize() {
 func (m *MemoryHistoryContainer) UpdateRender() {
 	data := memory.GetInstance()
 
-	startline := int(math.Max(0, float64(len(data.VirtualUsedHistory) - m.lineChart.Width)))
+	startline := int(math.Max(0, float64(len(data.VirtualUsedHistory)-m.lineChart.Width)))
 	m.lineChart.Data = data.VirtualUsedHistory[startline:]
 }
 
@@ -35,4 +34,3 @@ func (m *MemoryHistoryContainer) CreateUi() termui.GridBufferer {
 
 	return m.lineChart
 }
-

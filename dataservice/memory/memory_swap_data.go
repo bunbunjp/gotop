@@ -1,16 +1,16 @@
 package memory
 
 import (
-	"github.com/shirou/gopsutil/mem"
 	"github.com/bunbunjp/gotop/util"
+	"github.com/shirou/gopsutil/mem"
 	"time"
 )
 
 type MemorySwapDataService struct {
-	SwapUsedHistory []float64
+	SwapUsedHistory    []float64
 	VirtualUsedHistory []float64
-	LatestSwapStat mem.SwapMemoryStat
-	LatestVirtualStat mem.VirtualMemoryStat
+	LatestSwapStat     mem.SwapMemoryStat
+	LatestVirtualStat  mem.VirtualMemoryStat
 }
 
 var sharedInstance *MemorySwapDataService = &MemorySwapDataService{}
@@ -33,8 +33,7 @@ func (m *MemorySwapDataService) updateGoroutine() {
 	}
 }
 
-
-func (m *MemorySwapDataService) update()  {
+func (m *MemorySwapDataService) update() {
 	sstat, _ := mem.SwapMemory()
 	m.LatestSwapStat = *sstat
 

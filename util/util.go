@@ -2,8 +2,8 @@ package util
 
 import (
 	"github.com/gizak/termui"
-	"time"
 	"math/rand"
+	"time"
 )
 
 func GetColorRand() termui.Attribute {
@@ -39,6 +39,3 @@ func Byte2KB(byte float64) float64 {
 func Byte2KBi(byte uint64) float64 {
 	return Byte2KB(float64(byte))
 }
-
-
-

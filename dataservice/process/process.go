@@ -1,21 +1,20 @@
 package process
 
 import (
-	"time"
-	"sort"
-	"github.com/mattn/go-pipeline"
 	"encoding/csv"
-	"strings"
-	"strconv"
+	"github.com/mattn/go-pipeline"
 	"path"
+	"sort"
+	"strconv"
+	"strings"
+	"time"
 )
 
 type MiniProcessData struct {
-	Pid int32
+	Pid        int32
 	MemPercent float32
 	CpuPercent float64
-	Name string
-
+	Name       string
 }
 
 /*********************************************/
@@ -32,19 +31,19 @@ func (p ProcessArray) Swap(i, j int) {
 	p[i], p[j] = p[j], p[i]
 }
 
-type ByPID struct { ProcessArray }
+type ByPID struct{ ProcessArray }
 
 func (bp ByPID) Less(i, j int) bool {
 	return (bp.ProcessArray[i].Pid < bp.ProcessArray[j].Pid)
 }
 
-type ByMEM struct { ProcessArray }
+type ByMEM struct{ ProcessArray }
 
 func (bm ByMEM) Less(i, j int) bool {
 	return (bm.ProcessArray[i].MemPercent < bm.ProcessArray[j].MemPercent)
 }
 
-type ByCPU struct { ProcessArray }
+type ByCPU struct{ ProcessArray }
 
 func (bc ByCPU) Less(i, j int) bool {
 	return (bc.ProcessArray[i].CpuPercent < bc.ProcessArray[j].CpuPercent)
@@ -62,17 +61,17 @@ const (
 )
 
 type ProcessDataService struct {
-	Processes ProcessArray
-	isReverse bool
-	sortKey SortKey
-	isUpdateing bool
+	Processes         ProcessArray
+	isReverse         bool
+	sortKey           SortKey
+	isUpdateing       bool
 	selectedDataIndex int
 }
 
 var sharedInstance *ProcessDataService = &ProcessDataService{
-	isReverse:true,
-	sortKey:Cpu,
-	isUpdateing:false,
+	isReverse:   true,
+	sortKey:     Cpu,
+	isUpdateing: false,
 }
 
 func GetInstance() *ProcessDataService {
@@ -80,7 +79,7 @@ func GetInstance() *ProcessDataService {
 }
 
 func (p *ProcessDataService) IncrementSelectedIndex(incre int) {
-	if (p.selectedDataIndex + incre <= 0) {
+	if p.selectedDataIndex+incre <= 0 {
 		return
 	}
 	p.selectedDataIndex += incre
@@ -107,7 +106,6 @@ func (p *ProcessDataService) ChangeSortKey(key SortKey) {
 	p.isReverse = false
 	p.sortKey = key
 }
-
 
 func (p *ProcessDataService) Initialize() {
 	go p.updateGoroutine()
@@ -153,7 +151,6 @@ func (p *ProcessDataService) update() {
 		p.isUpdateing = false
 	}()
 
-
 	out, _ := pipeline.Output(
 		[]string{"ps", "auxww"},
 		[]string{"awk", "{print $2, $3, $4, $11}"},
@@ -175,12 +172,12 @@ func (p *ProcessDataService) update() {
 		name := r[3]
 
 		tmp = append(tmp, MiniProcessData{
-			Pid		: int32(pid),
-			CpuPercent	: cpu,
-			MemPercent	: float32(mem),
-			Name		: path.Base(name),
+			Pid:        int32(pid),
+			CpuPercent: cpu,
+			MemPercent: float32(mem),
+			Name:       path.Base(name),
 		})
- 	}
+	}
 
 	p.Processes = p.sort(tmp)
 }

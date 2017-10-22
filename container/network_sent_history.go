@@ -1,10 +1,10 @@
 package container
 
 import (
-	"github.com/gizak/termui"
 	"fmt"
-	"github.com/bunbunjp/gotop/util"
 	"github.com/bunbunjp/gotop/dataservice/network"
+	"github.com/bunbunjp/gotop/util"
+	"github.com/gizak/termui"
 )
 
 type NetworkSentHistoryContainer struct {
@@ -13,7 +13,6 @@ type NetworkSentHistoryContainer struct {
 
 func (n *NetworkSentHistoryContainer) Initialize() {
 }
-
 
 func (n *NetworkSentHistoryContainer) UpdateRender() {
 	data := network.GetInstace()

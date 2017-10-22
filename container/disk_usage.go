@@ -1,10 +1,10 @@
 package container
 
 import (
-	"github.com/gizak/termui"
 	"fmt"
-	"github.com/bunbunjp/gotop/util"
 	"github.com/bunbunjp/gotop/dataservice/disk"
+	"github.com/bunbunjp/gotop/util"
+	"github.com/gizak/termui"
 )
 
 type DiskUsageContainer struct {
@@ -14,7 +14,7 @@ type DiskUsageContainer struct {
 func (d *DiskUsageContainer) Initialize() {
 }
 
-func (d *DiskUsageContainer) UpdateData()  {
+func (d *DiskUsageContainer) UpdateData() {
 }
 
 func (d *DiskUsageContainer) UpdateRender() {

@@ -1,10 +1,10 @@
 package container
 
 import (
-	"github.com/gizak/termui"
 	"fmt"
-	"github.com/bunbunjp/gotop/util"
 	"github.com/bunbunjp/gotop/dataservice/network"
+	"github.com/bunbunjp/gotop/util"
+	"github.com/gizak/termui"
 )
 
 type NetworkRecvHistoryContainer struct {
@@ -13,7 +13,6 @@ type NetworkRecvHistoryContainer struct {
 
 func (n *NetworkRecvHistoryContainer) Initialize() {
 }
-
 
 func (n *NetworkRecvHistoryContainer) UpdateRender() {
 	data := network.GetInstace()

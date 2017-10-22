@@ -1,20 +1,19 @@
 package network
 
 import (
-	"time"
 	"github.com/shirou/gopsutil/net"
+	"time"
 )
 
 type NetworkDataService struct {
-	LatestStatus net.IOCountersStat
+	LatestStatus  net.IOCountersStat
 	SentPerSecond uint64
-	SentHistory []int
+	SentHistory   []int
 	RecvPerSecond uint64
-	RecvHistory []int
+	RecvHistory   []int
 }
 
-var sharedInstance *NetworkDataService = &NetworkDataService{
-}
+var sharedInstance *NetworkDataService = &NetworkDataService{}
 
 func GetInstace() *NetworkDataService {
 	return sharedInstance
@@ -40,11 +39,11 @@ func (n *NetworkDataService) update() {
 	statuses, _ := net.IOCounters(false)
 	for _, s := range statuses {
 		if s.Name == "all" {
-			if (n.LatestStatus.BytesRecv > 0) {
+			if n.LatestStatus.BytesRecv > 0 {
 				n.SentPerSecond = s.BytesRecv - n.LatestStatus.BytesRecv
 				n.RecvHistory = append(n.RecvHistory, int(n.SentPerSecond))
 			}
-			if (n.LatestStatus.BytesSent > 0) {
+			if n.LatestStatus.BytesSent > 0 {
 				n.RecvPerSecond = s.BytesSent - n.LatestStatus.BytesSent
 				n.SentHistory = append(n.SentHistory, int(n.RecvPerSecond))
 			}

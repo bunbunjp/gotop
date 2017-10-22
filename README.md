@@ -8,11 +8,10 @@ gtop looks better, gotop does looks bad but it is light.
 
 
 # Requirements
-- OSX (Linux suport soon)
+- OSX, Linux supported
 - go >= 1.9
 
 
 # todo
 - [ ] select process and execute kill
 - [ ] dynamic height change.
-- [ ] linux support.
