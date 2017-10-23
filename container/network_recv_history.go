@@ -18,7 +18,7 @@ func (n *NetworkRecvHistoryContainer) Initialize() {
 
 // UpdateRender # Container Interface
 func (n *NetworkRecvHistoryContainer) UpdateRender() {
-	data := network.GetInstace()
+	data := network.GetInstance()
 
 	n.linecharts[0].Data = data.RecvHistory
 	n.linecharts[0].Title = fmt.Sprintf("Recv total %.2fMB (%.2fKB/s)",
@@ -29,7 +29,7 @@ func (n *NetworkRecvHistoryContainer) UpdateRender() {
 
 // CreateUI # Container Interface
 func (n *NetworkRecvHistoryContainer) CreateUI() termui.GridBufferer {
-	data := network.GetInstace()
+	data := network.GetInstance()
 
 	n.linecharts = make([]termui.Sparkline, 0)
 	n.linecharts = append(n.linecharts, termui.NewSparkline())

@@ -18,7 +18,7 @@ func (n *NetworkSentHistoryContainer) Initialize() {
 
 // UpdateRender # Container Interface
 func (n *NetworkSentHistoryContainer) UpdateRender() {
-	data := network.GetInstace()
+	data := network.GetInstance()
 
 	n.linecharts[0].Data = data.SentHistory
 	n.linecharts[0].Title = fmt.Sprintf("Sent total %.2fMB (%.2fKB/s)",
@@ -30,7 +30,7 @@ func (n *NetworkSentHistoryContainer) UpdateRender() {
 
 // CreateUI # Container Interface
 func (n *NetworkSentHistoryContainer) CreateUI() termui.GridBufferer {
-	data := network.GetInstace()
+	data := network.GetInstance()
 
 	n.linecharts = make([]termui.Sparkline, 0)
 	n.linecharts = append(n.linecharts, termui.NewSparkline())

@@ -10,10 +10,11 @@ import (
 	"time"
 )
 
+// MiniProcessData プロセスリストのソート用構造体
 type MiniProcessData struct {
 	Pid        int32
 	MemPercent float32
-	CpuPercent float64
+	CPUPercent float64
 	Name       string
 }
 
@@ -21,83 +22,107 @@ type MiniProcessData struct {
 /*********** Sort interfaces      ************/
 /*********************************************/
 
-type ProcessArray []MiniProcessData
+// Processes プロセスリストの配列構造体
+type Processes []MiniProcessData
 
-func (p ProcessArray) Len() int {
+// Len with Sort interface
+func (p Processes) Len() int {
 	return len(p)
 }
 
-func (p ProcessArray) Swap(i, j int) {
+// Swap with Sort interface
+func (p Processes) Swap(i, j int) {
 	p[i], p[j] = p[j], p[i]
 }
 
-type ByPID struct{ ProcessArray }
+// ByPID プロセスリストのソートをPIDで行う
+type ByPID struct{ Processes }
 
+// Less with Sort interface
 func (bp ByPID) Less(i, j int) bool {
-	return (bp.ProcessArray[i].Pid < bp.ProcessArray[j].Pid)
+	return (bp.Processes[i].Pid < bp.Processes[j].Pid)
 }
 
-type ByMEM struct{ ProcessArray }
+// ByMEM プロセスリストのソートをメモリ利用率で行う
+type ByMEM struct{ Processes }
 
+// Less with Sort interface
 func (bm ByMEM) Less(i, j int) bool {
-	return (bm.ProcessArray[i].MemPercent < bm.ProcessArray[j].MemPercent)
+	return (bm.Processes[i].MemPercent < bm.Processes[j].MemPercent)
 }
 
-type ByCPU struct{ ProcessArray }
+// ByCPU プロセスリストのソートをCPU利用率で行う
+type ByCPU struct{ Processes }
 
+// Less with Sort interface
 func (bc ByCPU) Less(i, j int) bool {
-	return (bc.ProcessArray[i].CpuPercent < bc.ProcessArray[j].CpuPercent)
+	return (bc.Processes[i].CPUPercent < bc.Processes[j].CPUPercent)
 }
 
 /*********************************************/
 
+// SortKey 配列のキー識別子
 type SortKey int
 
 const (
+	// Pid プロセスID
 	Pid SortKey = iota
+
+	// Name プロセス名
 	Name
-	Cpu
+
+	// CPU CPU利用率
+	CPU
+
+	// Memory メモリ利用率
 	Memory
 )
 
-type ProcessDataService struct {
-	Processes         ProcessArray
+// Service プロセスリストのデータサービス
+type Service struct {
+	Processes         Processes
 	isReverse         bool
-	sortKey           SortKey
+	sortKey           sortKey
 	isUpdateing       bool
 	selectedDataIndex int
 }
 
-var sharedInstance *ProcessDataService = &ProcessDataService{
+var sharedInstance = &Service{
 	isReverse:   true,
-	sortKey:     Cpu,
+	sortKey:     CPU,
 	isUpdateing: false,
 }
 
-func GetInstance() *ProcessDataService {
+// GetInstance is get singleton instance
+func GetInstance() *Service {
 	return sharedInstance
 }
 
-func (p *ProcessDataService) IncrementSelectedIndex(incre int) {
+// IncrementSelectedIndex 選択中カラムの位置をインクリメントする
+func (p *Service) IncrementSelectedIndex(incre int) {
 	if p.selectedDataIndex+incre <= 0 {
 		return
 	}
 	p.selectedDataIndex += incre
 }
 
-func (p *ProcessDataService) GetSelectedIndex() int {
+// GetSelectedIndex 選択中カラムの位置を取得する
+func (p *Service) GetSelectedIndex() int {
 	return p.selectedDataIndex
 }
 
-func (p *ProcessDataService) GetSortKey() SortKey {
+// GetSortKey 現在のソートキーを取得する
+func (p *Service) GetSortKey() SortKey {
 	return p.sortKey
 }
 
-func (p *ProcessDataService) GetIsReverse() bool {
+// GetIsReverse 現在の並び順を取得する
+func (p *Service) GetIsReverse() bool {
 	return p.isReverse
 }
 
-func (p *ProcessDataService) ChangeSortKey(key SortKey) {
+// ChangeSortKey ソートキーを変更する
+func (p *Service) ChangeSortKey(key sortKey) {
 	if key == p.sortKey {
 		p.isReverse = !p.isReverse
 		return
@@ -107,11 +132,12 @@ func (p *ProcessDataService) ChangeSortKey(key SortKey) {
 	p.sortKey = key
 }
 
-func (p *ProcessDataService) Initialize() {
+// Initialize with DataService interface
+func (p *Service) Initialize() {
 	go p.updateGoroutine()
 }
 
-func (p *ProcessDataService) updateGoroutine() {
+func (p *Service) updateGoroutine() {
 	for {
 		p.update()
 
@@ -119,7 +145,7 @@ func (p *ProcessDataService) updateGoroutine() {
 	}
 }
 
-func (p *ProcessDataService) sort(data ProcessArray) ProcessArray {
+func (p *Service) sort(data Processes) Processes {
 	fx := func(inData sort.Interface) {
 		if p.isReverse {
 			sort.Sort(sort.Reverse(inData))
@@ -132,7 +158,7 @@ func (p *ProcessDataService) sort(data ProcessArray) ProcessArray {
 	case Pid:
 		fx(ByPID{data})
 		return data
-	case Cpu:
+	case CPU:
 		fx(ByCPU{data})
 		return data
 	case Memory:
@@ -142,7 +168,7 @@ func (p *ProcessDataService) sort(data ProcessArray) ProcessArray {
 	return data
 }
 
-func (p *ProcessDataService) update() {
+func (p *Service) update() {
 	if p.isUpdateing {
 		return
 	}
@@ -164,7 +190,7 @@ func (p *ProcessDataService) update() {
 	records, _ := reader.ReadAll()
 
 	p.Processes = []MiniProcessData{}
-	tmp := ProcessArray{}
+	tmp := Processes{}
 	for _, r := range records {
 		pid, _ := strconv.ParseInt(r[0], 10, 32)
 		cpu, _ := strconv.ParseFloat(r[1], 64)
@@ -173,7 +199,7 @@ func (p *ProcessDataService) update() {
 
 		tmp = append(tmp, MiniProcessData{
 			Pid:        int32(pid),
-			CpuPercent: cpu,
+			CPUPercent: cpu,
 			MemPercent: float32(mem),
 			Name:       path.Base(name),
 		})

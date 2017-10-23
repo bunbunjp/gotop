@@ -63,7 +63,7 @@ func (p *ProcessListContainer) UpdateRender() {
 
 		(*p.visibleRows)[count+1][0] = fmt.Sprint(process.Pid)
 		(*p.visibleRows)[count+1][1] = fmt.Sprint(p.nameStrRounding(process.Name))
-		(*p.visibleRows)[count+1][2] = fmt.Sprintf("%.1f", process.CpuPercent)
+		(*p.visibleRows)[count+1][2] = fmt.Sprintf("%.1f", process.CPUPercent)
 		(*p.visibleRows)[count+1][3] = fmt.Sprintf("%.1f", process.MemPercent)
 
 		count++
