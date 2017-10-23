@@ -9,26 +9,28 @@ import (
 	"unicode/utf8"
 )
 
-var ROW_HEADERS = []string{"PID", "Name", "CPU(%)", "MEM(%)"}
+var rowHeaders = []string{"PID", "Name", "CPU(%)", "MEM(%)"}
 
+// ProcessListContainer プロセス一覧を構成するコンテナーです
 type ProcessListContainer struct {
 	table       *termui.Table
 	visibleRows *[][]string
 }
 
+// Initialize # Container Interface
 func (p *ProcessListContainer) Initialize() {
-
 }
 
-func (pc *ProcessListContainer) UpdateData() {
+// UpdateData # Container Interface
+func (p *ProcessListContainer) UpdateData() {
 }
 
-func (pc *ProcessListContainer) getDefaultRow() []string {
+func (p *ProcessListContainer) getDefaultRow() []string {
 	return []string{"99999", "________________", "___", "___"}
 }
 
-func (pc *ProcessListContainer) nameStrRounding(full string) string {
-	limitLine := utf8.RuneCountInString(pc.getDefaultRow()[1])
+func (p *ProcessListContainer) nameStrRounding(full string) string {
+	limitLine := utf8.RuneCountInString(p.getDefaultRow()[1])
 	nameRunes := strings.Split(full, "")
 
 	if len(nameRunes) <= limitLine {
@@ -38,6 +40,7 @@ func (pc *ProcessListContainer) nameStrRounding(full string) string {
 	return strings.Join(nameRunes[:limitLine], "") + "..."
 }
 
+// UpdateRender # Container Interface
 func (p *ProcessListContainer) UpdateRender() {
 	data := dataservice.GetInstance()
 	visiblelimit := getHeight() - 3
@@ -60,7 +63,7 @@ func (p *ProcessListContainer) UpdateRender() {
 
 		(*p.visibleRows)[count+1][0] = fmt.Sprint(process.Pid)
 		(*p.visibleRows)[count+1][1] = fmt.Sprint(p.nameStrRounding(process.Name))
-		(*p.visibleRows)[count+1][2] = fmt.Sprintf("%.1f", process.CpuPercent)
+		(*p.visibleRows)[count+1][2] = fmt.Sprintf("%.1f", process.CPUPercent)
 		(*p.visibleRows)[count+1][3] = fmt.Sprintf("%.1f", process.MemPercent)
 
 		count++
@@ -78,7 +81,7 @@ func (p *ProcessListContainer) UpdateRender() {
 	}
 
 	header := []string{}
-	for _, v := range ROW_HEADERS {
+	for _, v := range rowHeaders {
 		header = append(header, v)
 	}
 	header[int(data.GetSortKey())] += sortIcon
@@ -89,9 +92,10 @@ func getHeight() int {
 	return 17
 }
 
-func (p *ProcessListContainer) CreateUi() termui.GridBufferer {
+// CreateUI # Container Interface
+func (p *ProcessListContainer) CreateUI() termui.GridBufferer {
 
-	p.visibleRows = &[][]string{ROW_HEADERS}
+	p.visibleRows = &[][]string{rowHeaders}
 
 	for i := 0; i < getHeight()-3; i++ {
 		row := p.getDefaultRow()

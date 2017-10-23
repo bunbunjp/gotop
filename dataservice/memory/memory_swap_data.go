@@ -6,26 +6,29 @@ import (
 	"time"
 )
 
-type MemorySwapDataService struct {
+// Service 仮想メモリ、スワップ領域などのデータサービスです
+type Service struct {
 	SwapUsedHistory    []float64
 	VirtualUsedHistory []float64
 	LatestSwapStat     mem.SwapMemoryStat
 	LatestVirtualStat  mem.VirtualMemoryStat
 }
 
-var sharedInstance *MemorySwapDataService = &MemorySwapDataService{}
+var sharedInstance = &Service{}
 
-func GetInstance() *MemorySwapDataService {
+// GetInstance is get singleton instance
+func GetInstance() *Service {
 	return sharedInstance
 }
 
-func (m *MemorySwapDataService) Initialize() {
+// Initialize is DataService interface
+func (m *Service) Initialize() {
 	vstat, _ := mem.VirtualMemory()
 	m.VirtualUsedHistory = append(m.VirtualUsedHistory, util.Byte2GB(float64((*vstat).Total)))
 	go m.updateGoroutine()
 }
 
-func (m *MemorySwapDataService) updateGoroutine() {
+func (m *Service) updateGoroutine() {
 	for {
 		m.update()
 
@@ -33,7 +36,7 @@ func (m *MemorySwapDataService) updateGoroutine() {
 	}
 }
 
-func (m *MemorySwapDataService) update() {
+func (m *Service) update() {
 	sstat, _ := mem.SwapMemory()
 	m.LatestSwapStat = *sstat
 

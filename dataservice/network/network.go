@@ -5,7 +5,8 @@ import (
 	"time"
 )
 
-type NetworkDataService struct {
+// Service ネットワーク使用率のデータサービス
+type Service struct {
 	LatestStatus  net.IOCountersStat
 	SentPerSecond uint64
 	SentHistory   []int
@@ -13,13 +14,15 @@ type NetworkDataService struct {
 	RecvHistory   []int
 }
 
-var sharedInstance *NetworkDataService = &NetworkDataService{}
+var sharedInstance = &Service{}
 
-func GetInstace() *NetworkDataService {
+// GetInstance is get singleton instance
+func GetInstance() *Service {
 	return sharedInstance
 }
 
-func (n *NetworkDataService) Initialize() {
+// Initialize is DataService interface
+func (n *Service) Initialize() {
 	n.SentHistory = []int{}
 
 	n.RecvHistory = []int{}
@@ -27,7 +30,7 @@ func (n *NetworkDataService) Initialize() {
 	go n.updateGoroutine()
 }
 
-func (n *NetworkDataService) updateGoroutine() {
+func (n *Service) updateGoroutine() {
 	for {
 		n.update()
 
@@ -35,7 +38,7 @@ func (n *NetworkDataService) updateGoroutine() {
 	}
 }
 
-func (n *NetworkDataService) update() {
+func (n *Service) update() {
 	statuses, _ := net.IOCounters(false)
 	for _, s := range statuses {
 		if s.Name == "all" {

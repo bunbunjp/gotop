@@ -5,7 +5,8 @@ import (
 	"time"
 )
 
-type CpuDataService struct {
+// Service CPU使用率のデータサービス
+type Service struct {
 	CoreCount  int
 	Latest     []float64
 	AccumuData [][]int
@@ -13,13 +14,15 @@ type CpuDataService struct {
 	isRunning bool
 }
 
-var sharedInstance *CpuDataService = &CpuDataService{isRunning: false}
+var sharedInstance = &Service{isRunning: false}
 
-func GetInstance() *CpuDataService {
+// GetInstance get singleton instance
+func GetInstance() *Service {
 	return sharedInstance
 }
 
-func (c *CpuDataService) Initialize() {
+// Initialize # DataService Interface
+func (c *Service) Initialize() {
 	if c.isRunning {
 		return
 	}
@@ -34,7 +37,7 @@ func (c *CpuDataService) Initialize() {
 	c.isRunning = true
 }
 
-func (c *CpuDataService) updateGoroutine() {
+func (c *Service) updateGoroutine() {
 	for {
 		c.update()
 
@@ -42,7 +45,7 @@ func (c *CpuDataService) updateGoroutine() {
 	}
 }
 
-func (c *CpuDataService) update() {
+func (c *Service) update() {
 	percent, _ := cpu.Percent(0*time.Millisecond, true)
 
 	c.Latest = percent
