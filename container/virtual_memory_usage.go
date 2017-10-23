@@ -7,13 +7,16 @@ import (
 	"github.com/gizak/termui"
 )
 
+// VirtualMemoryUsageContainer 全体の仮想メモリの表示用コンテナ
 type VirtualMemoryUsageContainer struct {
 	virtualGauge *termui.Gauge
 }
 
+// Initialize # Container Interface
 func (v *VirtualMemoryUsageContainer) Initialize() {
 }
 
+// UpdateRender # Container Interface
 func (v *VirtualMemoryUsageContainer) UpdateRender() {
 	data := memory.GetInstance()
 
@@ -23,6 +26,7 @@ func (v *VirtualMemoryUsageContainer) UpdateRender() {
 		util.Byte2GBi(data.LatestVirtualStat.Total))
 }
 
+// CreateUI # Container Interface
 func (v *VirtualMemoryUsageContainer) CreateUI() termui.GridBufferer {
 
 	v.virtualGauge = termui.NewGauge()

@@ -9,20 +9,19 @@ import (
 	"unicode/utf8"
 )
 
-// カラム名定数
-var ROW_HEADERS = []string{"PID", "Name", "CPU(%)", "MEM(%)"}
+var rowHeaders = []string{"PID", "Name", "CPU(%)", "MEM(%)"}
 
-// プロセス一覧を構成するコンテナーです
+// ProcessListContainer プロセス一覧を構成するコンテナーです
 type ProcessListContainer struct {
 	table       *termui.Table
 	visibleRows *[][]string
 }
 
-// Container Interface # Initialize
+// Initialize # Container Interface
 func (p *ProcessListContainer) Initialize() {
 }
 
-// Container Interface # UpdateData
+// UpdateData # Container Interface
 func (p *ProcessListContainer) UpdateData() {
 }
 
@@ -41,7 +40,7 @@ func (p *ProcessListContainer) nameStrRounding(full string) string {
 	return strings.Join(nameRunes[:limitLine], "") + "..."
 }
 
-// Container Interface # UpdateRender
+// UpdateRender # Container Interface
 func (p *ProcessListContainer) UpdateRender() {
 	data := dataservice.GetInstance()
 	visiblelimit := getHeight() - 3
@@ -82,7 +81,7 @@ func (p *ProcessListContainer) UpdateRender() {
 	}
 
 	header := []string{}
-	for _, v := range ROW_HEADERS {
+	for _, v := range rowHeaders {
 		header = append(header, v)
 	}
 	header[int(data.GetSortKey())] += sortIcon
@@ -93,10 +92,10 @@ func getHeight() int {
 	return 17
 }
 
-// Container Interface # CreateUi
+// CreateUI # Container Interface
 func (p *ProcessListContainer) CreateUI() termui.GridBufferer {
 
-	p.visibleRows = &[][]string{ROW_HEADERS}
+	p.visibleRows = &[][]string{rowHeaders}
 
 	for i := 0; i < getHeight()-3; i++ {
 		row := p.getDefaultRow()

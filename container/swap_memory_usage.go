@@ -7,13 +7,16 @@ import (
 	"github.com/gizak/termui"
 )
 
+// SwapMemoryUsageContainer メモリのスワップ領域の表示用コンテナ
 type SwapMemoryUsageContainer struct {
 	swapGauge *termui.Gauge
 }
 
+// Initialize # Container Interface
 func (s *SwapMemoryUsageContainer) Initialize() {
 }
 
+// UpdateRender # Container Interface
 func (s *SwapMemoryUsageContainer) UpdateRender() {
 	data := memory.GetInstance()
 
@@ -23,6 +26,7 @@ func (s *SwapMemoryUsageContainer) UpdateRender() {
 		int(util.Byte2MBi(data.LatestSwapStat.Total)))
 }
 
+// CreateUI # Container Interface
 func (s *SwapMemoryUsageContainer) CreateUI() termui.GridBufferer {
 
 	s.swapGauge = termui.NewGauge()

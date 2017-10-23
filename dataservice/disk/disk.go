@@ -5,27 +5,30 @@ import (
 	"time"
 )
 
-type DiskDataService struct {
+// Service ディスク使用量取得用データサービス
+type Service struct {
 	UsageStat *disk.UsageStat
 }
 
-var sharedInstance *DiskDataService = &DiskDataService{}
+var sharedInstance = &Service{}
 
-func GetInstance() *DiskDataService {
+// GetInstance get singleton instance
+func GetInstance() *Service {
 	return sharedInstance
 }
 
-func (d *DiskDataService) Initialize() {
+// Initialize # DataService Interface
+func (d *Service) Initialize() {
 	go d.updateGoroutine()
 
 }
-func (d *DiskDataService) updateGoroutine() {
+func (d *Service) updateGoroutine() {
 	for {
 		d.update()
 
 		time.Sleep(3 * time.Second)
 	}
 }
-func (d *DiskDataService) update() {
+func (d *Service) update() {
 	d.UsageStat, _ = disk.Usage("/")
 }
