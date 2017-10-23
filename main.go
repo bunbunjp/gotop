@@ -7,10 +7,7 @@ import (
 	"github.com/bunbunjp/gotop/dataservice/memory"
 	"github.com/bunbunjp/gotop/dataservice/network"
 	"github.com/bunbunjp/gotop/dataservice/process"
-	"github.com/comail/colog"
 	ui "github.com/gizak/termui"
-	"log"
-	"os"
 	"time"
 )
 
@@ -45,14 +42,6 @@ func main() {
 		panic(err)
 	}
 	defer ui.Close()
-
-	file, err := os.OpenFile("main.log", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0777)
-	colog.Register()
-	colog.SetOutput(file)
-	colog.ParseFields(true)
-	colog.SetFormatter(&colog.StdFormatter{
-		Flag: log.Lshortfile,
-	})
 
 	dataservices := []DataService{
 		cpudata.GetInstance(),
