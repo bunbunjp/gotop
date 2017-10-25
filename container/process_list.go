@@ -7,6 +7,7 @@ import (
 	"math"
 	"strings"
 	"unicode/utf8"
+	"log"
 )
 
 var rowHeaders = []string{"PID", "Name", "CPU(%)", "MEM(%)"}
@@ -59,7 +60,13 @@ func (p *ProcessListContainer) UpdateRender() {
 		}
 	}
 
-	for _, process := range data.Processes[byas : visiblelimit+byas] {
+	ceil := int(math.Min(float64(visiblelimit+byas), float64(len(data.Processes))))
+
+	log.Println("byas, ", byas)
+	log.Println("visiblelimit+byas, ", visiblelimit+byas)
+	log.Println("data.Processes, ", data.Processes)
+
+	for _, process := range data.Processes[byas : ceil] {
 
 		(*p.visibleRows)[count+1][0] = fmt.Sprint(process.Pid)
 		(*p.visibleRows)[count+1][1] = fmt.Sprint(p.nameStrRounding(process.Name))
