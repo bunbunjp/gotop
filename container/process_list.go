@@ -1,10 +1,7 @@
 package container
 
 import (
-	"fmt"
-	dataservice "github.com/bunbunjp/gotop/dataservice/process"
-	"github.com/gizak/termui"
-	"math"
+	"github.com/jroimartin/gocui"
 	"strings"
 	"unicode/utf8"
 )
@@ -13,7 +10,7 @@ var rowHeaders = []string{"PID", "Name", "CPU(%)", "MEM(%)"}
 
 // ProcessListContainer プロセス一覧を構成するコンテナーです
 type ProcessListContainer struct {
-	table       *termui.Table
+	//table       *termui.Table
 	visibleRows *[][]string
 }
 
@@ -42,50 +39,50 @@ func (p *ProcessListContainer) nameStrRounding(full string) string {
 
 // UpdateRender # Container Interface
 func (p *ProcessListContainer) UpdateRender() {
-	data := dataservice.GetInstance()
-	visiblelimit := getHeight() - 3
-	selectedIndex := data.GetSelectedIndex()
-	byas := int(math.Max(0.0, float64((selectedIndex+1)-visiblelimit)))
-	count := 0
-
-	// 選択中の行をカラーリング
-	for i := 0; i < visiblelimit; i++ {
-		if i == (selectedIndex - byas) {
-			p.table.BgColors[i+1] = termui.ColorGreen
-			p.table.FgColors[i+1] = termui.ColorBlack
-		} else {
-			p.table.BgColors[i+1] = termui.ColorBlack
-			p.table.FgColors[i+1] = termui.ColorWhite
-		}
-	}
-
-	for _, process := range data.Processes[byas : visiblelimit+byas] {
-
-		(*p.visibleRows)[count+1][0] = fmt.Sprint(process.Pid)
-		(*p.visibleRows)[count+1][1] = fmt.Sprint(p.nameStrRounding(process.Name))
-		(*p.visibleRows)[count+1][2] = fmt.Sprintf("%.1f", process.CPUPercent)
-		(*p.visibleRows)[count+1][3] = fmt.Sprintf("%.1f", process.MemPercent)
-
-		count++
-	}
-
-	for ; count > visiblelimit; count++ {
-		(*p.visibleRows)[count+1] = p.getDefaultRow()
-	}
-
-	var sortIcon string
-	if data.GetIsReverse() {
-		sortIcon = " ▼"
-	} else {
-		sortIcon = " ▲"
-	}
-
-	header := []string{}
-	for _, v := range rowHeaders {
-		header = append(header, v)
-	}
-	header[int(data.GetSortKey())] += sortIcon
-	(*p.visibleRows)[0] = header
+	//data := dataservice.GetInstance()
+	//visiblelimit := getHeight() - 3
+	//selectedIndex := data.GetSelectedIndex()
+	//byas := int(math.Max(0.0, float64((selectedIndex+1)-visiblelimit)))
+	//count := 0
+	//
+	//// 選択中の行をカラーリング
+	//for i := 0; i < visiblelimit; i++ {
+	//	if i == (selectedIndex - byas) {
+	//		p.table.BgColors[i+1] = termui.ColorGreen
+	//		p.table.FgColors[i+1] = termui.ColorBlack
+	//	} else {
+	//		p.table.BgColors[i+1] = termui.ColorBlack
+	//		p.table.FgColors[i+1] = termui.ColorWhite
+	//	}
+	//}
+	//
+	//for _, process := range data.Processes[byas : visiblelimit+byas] {
+	//
+	//	(*p.visibleRows)[count+1][0] = fmt.Sprint(process.Pid)
+	//	(*p.visibleRows)[count+1][1] = fmt.Sprint(p.nameStrRounding(process.Name))
+	//	(*p.visibleRows)[count+1][2] = fmt.Sprintf("%.1f", process.CPUPercent)
+	//	(*p.visibleRows)[count+1][3] = fmt.Sprintf("%.1f", process.MemPercent)
+	//
+	//	count++
+	//}
+	//
+	//for ; count > visiblelimit; count++ {
+	//	(*p.visibleRows)[count+1] = p.getDefaultRow()
+	//}
+	//
+	//var sortIcon string
+	//if data.GetIsReverse() {
+	//	sortIcon = " ▼"
+	//} else {
+	//	sortIcon = " ▲"
+	//}
+	//
+	//header := []string{}
+	//for _, v := range rowHeaders {
+	//	header = append(header, v)
+	//}
+	//header[int(data.GetSortKey())] += sortIcon
+	//(*p.visibleRows)[0] = header
 }
 
 func getHeight() int {
@@ -93,26 +90,49 @@ func getHeight() int {
 }
 
 // CreateUI # Container Interface
-func (p *ProcessListContainer) CreateUI() termui.GridBufferer {
+func (p *ProcessListContainer) CreateUI(g *gocui.Gui) error {
 
-	p.visibleRows = &[][]string{rowHeaders}
+	//p.visibleRows = &[][]string{rowHeaders}
+	//
+	//for i := 0; i < getHeight()-3; i++ {
+	//	row := p.getDefaultRow()
+	//	*p.visibleRows = append(*p.visibleRows, row)
+	//}
+	//
+	//p.table = termui.NewTable()
+	//p.table.FgColor = termui.ColorWhite
+	//p.table.BgColor = termui.ColorDefault
+	//p.table.TextAlign = termui.AlignLeft
+	//p.table.Separator = false
+	//p.table.Rows = *p.visibleRows
+	//p.table.X = termui.TermWidth() / 2
+	//p.table.Width = termui.TermWidth() / 2
+	//p.table.Analysis()
+	//p.table.SetSize()
+	//p.table.Border = true
+	//
+	//return p.table
+	maxX, maxY := g.Size()
+	width := maxX / 2
+	height := maxY / 3
+	if v, err := g.SetView("main", 0, 0, width, height); err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+		v.Editable = true
+		v.Wrap = true
 
-	for i := 0; i < getHeight()-3; i++ {
-		row := p.getDefaultRow()
-		*p.visibleRows = append(*p.visibleRows, row)
+		for i := 0; i < width; i++ {
+			err := g.SetRune(i, 2, 'x')
+
+			if err != nil {
+				return err
+			}
+		}
+
+		if err := g.SetCurrentView("main"); err != nil {
+			return err
+		}
 	}
-
-	p.table = termui.NewTable()
-	p.table.FgColor = termui.ColorWhite
-	p.table.BgColor = termui.ColorDefault
-	p.table.TextAlign = termui.AlignLeft
-	p.table.Separator = false
-	p.table.Rows = *p.visibleRows
-	p.table.X = termui.TermWidth() / 2
-	p.table.Width = termui.TermWidth() / 2
-	p.table.Analysis()
-	p.table.SetSize()
-	p.table.Border = true
-
-	return p.table
+	return nil
 }
