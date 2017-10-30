@@ -1,7 +1,12 @@
 package container
 
 import (
+	"fmt"
+	"github.com/bunbunjp/gotop/dataservice/process"
 	"github.com/jroimartin/gocui"
+	"github.com/olekukonko/tablewriter"
+	"log"
+	"math"
 	"strings"
 	"unicode/utf8"
 )
@@ -38,12 +43,33 @@ func (p *ProcessListContainer) nameStrRounding(full string) string {
 }
 
 // UpdateRender # Container Interface
-func (p *ProcessListContainer) UpdateRender() {
+func (p *ProcessListContainer) UpdateRender(g *gocui.Gui) error {
 	//data := dataservice.GetInstance()
-	//visiblelimit := getHeight() - 3
-	//selectedIndex := data.GetSelectedIndex()
-	//byas := int(math.Max(0.0, float64((selectedIndex+1)-visiblelimit)))
-	//count := 0
+	data := process.GetInstance()
+
+	view, _ := g.View("process_list")
+	width, height := view.Size()
+	view.Clear()
+	//for idx, process := range data.Processes {
+	//	fmt.Fprintln(view, process.Name)
+	//
+	//	if idx > 10 {
+	//		break
+	//	}
+	//}
+	table := tablewriter.NewWriter(view)
+	table.SetHeader(rowHeaders)
+	table.SetColWidth(width)
+
+	//for _, v := range data {
+	//	log.Println(v)
+	//	table.Append(p.getDefaultRow())
+	//}
+
+	visiblelimit := height - 3
+	selectedIndex := data.GetSelectedIndex()
+	byas := int(math.Max(0.0, float64((selectedIndex+1)-visiblelimit)))
+	count := 0
 	//
 	//// 選択中の行をカラーリング
 	//for i := 0; i < visiblelimit; i++ {
@@ -56,19 +82,28 @@ func (p *ProcessListContainer) UpdateRender() {
 	//	}
 	//}
 	//
-	//for _, process := range data.Processes[byas : visiblelimit+byas] {
+
+	ceil := int(math.Min(float64(visiblelimit+byas), float64(len(data.Processes))))
+
+	log.Println("byas, ", byas)
+	log.Println("ceil, ", ceil)
+	log.Println("leng, ", len(data.Processes))
+
+	for _, process := range data.Processes[byas:ceil] {
+		table.Append([]string{
+			fmt.Sprint(process.Pid),
+			fmt.Sprint(p.nameStrRounding(process.Name)),
+			fmt.Sprintf("%.1f", process.CPUPercent),
+			fmt.Sprintf("%.1f", process.MemPercent),
+		})
+
+		count++
+	}
 	//
-	//	(*p.visibleRows)[count+1][0] = fmt.Sprint(process.Pid)
-	//	(*p.visibleRows)[count+1][1] = fmt.Sprint(p.nameStrRounding(process.Name))
-	//	(*p.visibleRows)[count+1][2] = fmt.Sprintf("%.1f", process.CPUPercent)
-	//	(*p.visibleRows)[count+1][3] = fmt.Sprintf("%.1f", process.MemPercent)
-	//
-	//	count++
-	//}
-	//
-	//for ; count > visiblelimit; count++ {
-	//	(*p.visibleRows)[count+1] = p.getDefaultRow()
-	//}
+	for ; count > visiblelimit; count++ {
+		table.Append(p.getDefaultRow())
+	}
+	table.Render() // Send output
 	//
 	//var sortIcon string
 	//if data.GetIsReverse() {
@@ -83,6 +118,7 @@ func (p *ProcessListContainer) UpdateRender() {
 	//}
 	//header[int(data.GetSortKey())] += sortIcon
 	//(*p.visibleRows)[0] = header
+	return nil
 }
 
 func getHeight() int {
@@ -115,22 +151,17 @@ func (p *ProcessListContainer) CreateUI(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 	width := maxX / 2
 	height := maxY / 3
-	if v, err := g.SetView("main", 0, 0, width, height); err != nil {
+	if v, err := g.SetView("process_list", 0, 0, width, height); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-		v.Editable = true
+		v.Editable = false
 		v.Wrap = true
 
-		for i := 0; i < width; i++ {
-			err := g.SetRune(i, 2, 'x')
+		v.Title = "main"
 
-			if err != nil {
-				return err
-			}
-		}
-
-		if err := g.SetCurrentView("main"); err != nil {
+		if err := g.SetCurrentView("process_list"); err != nil {
+			log.Panicln(err)
 			return err
 		}
 	}

@@ -1,8 +1,10 @@
 package: github.com/bunbunjp/gotop
 import:
+- package: github.com/comail/colog
 - package: github.com/jroimartin/gocui
   version: ^0.3.0
 - package: github.com/mattn/go-pipeline
+- package: github.com/olekukonko/tablewriter
 - package: github.com/shirou/gopsutil
   version: ^2.17.9
   subpackages:

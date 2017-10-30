@@ -1,6 +1,8 @@
-hash: 22cbaa72509eec74cdb0e220cf576f1b2396fc33dd599c664a7d16e09421555a
-updated: 2017-10-30T11:56:30.424931+09:00
+hash: 215a35cc77aef2c107c877c7c37175f9bc825ec47b51e2cea3b22a58eadd21c6
+updated: 2017-10-30T17:11:05.30878+09:00
 imports:
+- name: github.com/comail/colog
+  version: fba8e7b1f46c3607f09760ce3880066e7ff57c5a
 - name: github.com/go-ole/go-ole
   version: 2ecd927eaf828c4fc088fae349b28eed1480ff56
   subpackages:
@@ -13,6 +15,8 @@ imports:
   version: 97311d9f7767e3d6f422ea06661bc2c7a19e8a5d
 - name: github.com/nsf/termbox-go
   version: 10cefba34bc5e7a6e5df0836a42513c28a10e074
+- name: github.com/olekukonko/tablewriter
+  version: a7a4c189eb47ed33ce7b35f2880070a0c82a67d4
 - name: github.com/shirou/gopsutil
   version: 6e221c482653ef05c9f6a7bf71ddceea0e40bac5
   subpackages:
