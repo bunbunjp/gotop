@@ -1,15 +1,14 @@
 package util
 
 import (
-	"github.com/gizak/termui"
 	"math/rand"
 	"time"
 )
 
-// GetColorRand ランダムなカラー値を取得する
-func GetColorRand() termui.Attribute {
-	return termui.ColorRGB(getColorRandInt(), getColorRandInt(), getColorRandInt())
-}
+//// GetColorRand ランダムなカラー値を取得する
+//func GetColorRand() termui.Attribute {
+//	return termui.ColorRGB(getColorRandInt(), getColorRandInt(), getColorRandInt())
+//}
 
 func getColorRandInt() int {
 	rand.Seed(time.Now().UnixNano())

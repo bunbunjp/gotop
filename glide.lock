@@ -1,26 +1,22 @@
-hash: aa09f089d6e61830190fe0ee16000faafeb5e68ee25f1c4385cd5fa617c788c9
-updated: 2017-10-15T13:32:57.759141368+09:00
+hash: 215a35cc77aef2c107c877c7c37175f9bc825ec47b51e2cea3b22a58eadd21c6
+updated: 2017-10-30T17:11:05.30878+09:00
 imports:
 - name: github.com/comail/colog
   version: fba8e7b1f46c3607f09760ce3880066e7ff57c5a
-- name: github.com/gizak/termui
-  version: 24acd523c756fd9728824cdfac66aad9d8982fb7
 - name: github.com/go-ole/go-ole
-  version: 8a4f5c214bfb4475619b8bb7ccbe6fa5c91745f4
+  version: 2ecd927eaf828c4fc088fae349b28eed1480ff56
   subpackages:
   - oleutil
-- name: github.com/maruel/panicparse
-  version: e097e77a230345db8ac8961861c81fb509c845c9
-  subpackages:
-  - stack
+- name: github.com/jroimartin/gocui
+  version: 4e9ce9a8e26f2ef33dfe297dbdfca148733b6b9b
 - name: github.com/mattn/go-pipeline
   version: cfb87a531e2beb376fe3ce94a6dfef7956d33bc7
 - name: github.com/mattn/go-runewidth
   version: 97311d9f7767e3d6f422ea06661bc2c7a19e8a5d
-- name: github.com/mitchellh/go-wordwrap
-  version: ad45545899c7b13c020ea92b2072220eefad42b8
 - name: github.com/nsf/termbox-go
-  version: 4ed959e0540971545eddb8c75514973d670cf739
+  version: 10cefba34bc5e7a6e5df0836a42513c28a10e074
+- name: github.com/olekukonko/tablewriter
+  version: a7a4c189eb47ed33ce7b35f2880070a0c82a67d4
 - name: github.com/shirou/gopsutil
   version: 6e221c482653ef05c9f6a7bf71ddceea0e40bac5
   subpackages:
@@ -32,7 +28,7 @@ imports:
 - name: github.com/StackExchange/wmi
   version: ea383cf3ba6ec950874b8486cd72356d007c768f
 - name: golang.org/x/sys
-  version: 314a259e304ff91bd6985da2a7149bbf91237993
+  version: 661970f62f5897bc0cd5fdca7e087ba8a98a8fa1
   subpackages:
   - unix
   - windows
