@@ -49,8 +49,11 @@ func main() {
 	}
 	defer g.Close()
 
-	containers := []Container{
-		new(container.ProcessListContainer),
+	containers := containerMap{
+		m: map[string]Container{
+			"memory_history": new(container.MemoryHistoryContainer),
+			"process_list":   new(container.ProcessListContainer),
+		},
 	}
 
 	file, _ := os.OpenFile("main.log", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0777)
@@ -73,19 +76,25 @@ func main() {
 		v.Initialize()
 	}
 
-	for _, c := range containers {
-		c.Initialize()
+	g.SetLayout(func(g *gocui.Gui) error {
+		for _, c := range containers.m {
+			c.Initialize()
+			err := c.CreateUI(g)
+			if err != nil {
+				log.Panicln(err)
+				return err
+			}
+		}
+		return nil
+	})
 
-		g.SetLayout(c.CreateUI)
-	}
-
-	if err := g.SetKeybinding("process_list", gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
+	if err := g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
 		log.Panicln(err)
 	}
 
 	go func() {
 		for {
-			for _, c := range containers {
+			for _, c := range containers.m {
 				g.Execute(c.UpdateRender)
 			}
 			time.Sleep(1 * time.Second)

@@ -4,8 +4,8 @@ package cpudata
 
 import (
 	"github.com/shirou/gopsutil/cpu"
-	"strings"
 	"log"
+	"strings"
 )
 
 func (c *Service) Update() {
